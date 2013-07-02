@@ -9,17 +9,28 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+/**
+ * @author Zaki Anwar Hamdani
+ * 
+ *         The custom view that keeps displaying an image continuously at random
+ *         positions over another background image. The image motion can be
+ *         stopped or started by tapping the device.
+ * 
+ */
 public class CustomView extends View implements OnTouchListener, Runnable {
 
 	private boolean stopped = true;
-	private int x = 0;
-	private int y = 550;
 	private Drawable image_melbjvm;
+	private Drawable backgroundImage;
+
 	private Random random;
+
+	private int currentPosition__X = 0;
+	private int currentPosition__Y = 550;
 	private int screenWidth;
 	private int screenHeight;
+
 	private boolean initialised = false;
-	private Drawable backgroundImage;
 
 	public CustomView(Context context) {
 		super(context);
@@ -46,8 +57,9 @@ public class CustomView extends View implements OnTouchListener, Runnable {
 		}
 
 		backgroundImage.draw(canvas);
-		image_melbjvm.setBounds(x, y, x + image_melbjvm.getIntrinsicWidth(), y
-				+ image_melbjvm.getIntrinsicHeight());
+		image_melbjvm.setBounds(currentPosition__X, currentPosition__Y,
+				currentPosition__X + image_melbjvm.getIntrinsicWidth(),
+				currentPosition__Y + image_melbjvm.getIntrinsicHeight());
 		image_melbjvm.draw(canvas);
 
 	}
@@ -65,14 +77,16 @@ public class CustomView extends View implements OnTouchListener, Runnable {
 	public void run() {
 		while (true) {
 			if (!stopped) {
-				x = (x + (random.nextInt()) % 3) % screenWidth;
-				y = (y + (random.nextInt()) % 3) % screenHeight;
+				currentPosition__X = (currentPosition__X + (random.nextInt()) % 3)
+						% screenWidth;
+				currentPosition__Y = (currentPosition__Y + (random.nextInt()) % 3)
+						% screenHeight;
 
-				if (x < 0) {
-					x = 0;
+				if (currentPosition__X < 0) {
+					currentPosition__X = 0;
 				}
-				if (y < 0) {
-					y = 0;
+				if (currentPosition__Y < 0) {
+					currentPosition__Y = 0;
 				}
 				postInvalidate();
 
